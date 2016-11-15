@@ -49,10 +49,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'service/login';
+$route['default_controller'] = 'heartapp';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
-$route['service'] = 'service';
+$route['heartapp/register'] = 'heartapp/registro';
+
+$route['heartapp/login'] = 'heartapp/validate';
+$route['heartapp/logout'] = 'heartapp/logout';
+$route['heartapp/panel'] = 'heartapp/panel';
+$route['heartapp/perfil'] = 'heartapp/profile';
+$route['heartapp/reporte'] = 'heartapp/report';
+$route['heartapp/pulso'] = 'heartapp/pulse';
+$route['heartapp/ubicacion'] = 'heartapp/map';
+
+
+
+
+$route['service'] = 'service/login';
 
 $route['insert'] = 'service/insertdata';
