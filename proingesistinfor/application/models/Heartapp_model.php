@@ -37,6 +37,21 @@ class Heartapp_model extends CI_Model {
     $query = $this->db->query('select * from user where email = "'.$email.'" and password = "'.$password.'" limit 1');
     if ($query->num_rows() > 0) {
       $data['user'] = $query->row();
+      return $data;
+    } else {
+      return null;
+    }
+  }
+
+  function updateUser($id, $user){
+    $this->db->where('id', $id);
+    $this->db->update('user', $user); 
+  }
+
+  function getUserId($id){
+    $query = $this->db->query('select * from user where id = '.$id.' limit 1');
+    if ($query->num_rows() > 0) {
+      $data['user'] = $query->row();
       $data['contacts'] = $this->getContact($query->row()->id);
       return $data;
     } else {

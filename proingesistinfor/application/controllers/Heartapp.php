@@ -29,7 +29,7 @@ class Heartapp extends CI_Controller {
       'cover' => $this->upload_image('cover'),
       'email' => $this->input->post('email'),
       'cellphone' => $this->input->post('cellphone'),
-      'country' => $this->input->post('country'),
+      'country' => 'Bolivia',
       'city' => $this->input->post('city')
     );
     $contacts = array(
@@ -57,6 +57,7 @@ class Heartapp extends CI_Controller {
   function panel() {
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Panel';
@@ -70,24 +71,42 @@ class Heartapp extends CI_Controller {
   function profile(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Perfil';
       $data['section'] = $this->uri->segment(2);
-      $userdata = $this->session->userdata('userdata');
       $data['view'] = $this->load->view('heartapp/profile', $data, true);   
       $this->view($data);
+    }
+  }
+
+  function profile_update(){
+    if ($this->loggedIn()) {
+      $userdata = $this->session->userdata('userdata');
+      $id = $userdata['user']->id;
+      $user = array(
+        'username' => $this->input->post('username'),
+        'password' => $this->input->post('password'), 
+        'firstname' => $this->input->post('firstname'), 
+        'lastname' => $this->input->post('lastname'), 
+        'email' => $this->input->post('email'), 
+        'cellphone' => $this->input->post('cellphone'), 
+        'city' => $this->input->post('city')
+      );
+      $this->heartapp_model->updateUser($id, $user);
+      redirect('heartapp/perfil');
     }
   }
 
   function report(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Reporte';
       $data['section'] = $this->uri->segment(2);
-      $userdata = $this->session->userdata('userdata');
       $data['view'] = $this->load->view('heartapp/report', $data, true);   
       $this->view($data);
     }
@@ -96,11 +115,11 @@ class Heartapp extends CI_Controller {
   function pulse(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Pulso cardiaco';
       $data['section'] = $this->uri->segment(2);
-      $userdata = $this->session->userdata('userdata');
       $data['view'] = $this->load->view('heartapp/pulse', $data, true);   
       $this->view($data);
     }
@@ -109,11 +128,12 @@ class Heartapp extends CI_Controller {
   function map(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Mapa de ubicación';
       $data['section'] = $this->uri->segment(2);
-      $userdata = $this->session->userdata('userdata');
+      $data['map'] = $this->create_mapa();
       $data['view'] = $this->load->view('heartapp/map', $data, true);   
       $this->view($data);
     }
@@ -164,10 +184,6 @@ class Heartapp extends CI_Controller {
       redirect('heartapp/panel');
     }
   }
-  
-
-
-
 
   function view($data) {
     $this->load->view('heartapp/head', $data);

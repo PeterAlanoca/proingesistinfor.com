@@ -12,18 +12,18 @@
         <script src="<?php echo base_url();?>assets/frontend/js/jquery-1.10.2.js" type="text/javascript"></script>
         <script src="<?php echo base_url();?>assets/frontend/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url();?>assets/frontend/js/bootstrap.js" type="text/javascript"></script>
+        <script src="<?php echo base_url();?>assets/frontend/js/jquery.validate.js" type="text/javascript"></script>
+        <script src="<?php echo base_url();?>assets/frontend/js/site.js" type="text/javascript"></script>
         <script src="<?php echo base_url();?>assets/frontend/js/awesome-landing-page.js" type="text/javascript"></script>
         <link href="<?php echo base_url();?>assets/frontend/css/star-rating/fileinput.css" media="all" rel="stylesheet" type="text/css" />
         <script src="<?php echo base_url();?>assets/frontend/js/star-rating/fileinput.js" type="text/javascript"></script>
         <script src="<?php echo base_url();?>assets/frontend/js/star-rating/es.js" type="text/javascript"></script>
-        <!--     Fonts and icons     -->
         <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/frontend/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
     </head>
     <body class="landing-page landing-page1">
         <nav class="navbar navbar-transparent navbar-top" role="navigation">
             <div class="container">
-                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button id="menu-toggle" type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example">
                     <span class="sr-only">Toggle navigation</span>
@@ -42,7 +42,6 @@
                         </div>
                     </a>
                 </div>
-                <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="example" >
                     <ul class="nav navbar-nav navbar-right">
                         <li>
@@ -77,7 +76,6 @@
                         </li>
                     </ul>
                 </div>
-                <!-- /.navbar-collapse -->
             </div>
         </nav>
         <div class="wrapper">
@@ -127,13 +125,14 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                     </div>
                 </div>
             </div>
+
+            <form id="frm" method="post" action="<?php echo base_url(); ?>heartapp/register" enctype="multipart/form-data">
             <div class="section section-presentation">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="header-text">Registrarte</h4>
                             <h6 class="sub-header-text">Información personal</h6>
-                            <form method="post" action="<?php echo base_url(); ?>heartapp/register" enctype="multipart/form-data">
                             <div class="form-group">
                                 <input type="text" class="form-control" name="username" id="username" placeholder="Nombre de usuario. (Ejemplo juan.perez)">
                             </div>
@@ -152,7 +151,7 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
 
                             <h6 class="sub-header-text">Información de contacto</h6>
                             <div class="form-group">
-                                <select class="form-control" id="country" name="country">
+                                <select class="form-control" id="country" name="country" disabled>
                                     <option>Argentina</option>
                                     <option selected>Bolivia</option>
                                     <option>Brasil</option>
@@ -184,7 +183,7 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                             </div>
                             <h6 class="sub-header-text">Foto y portada</h6>
                             <div class="form-group">
-                                <input id="photo" name="photo" class="file" type="file" accept="image/jpg"  data-min-file-count="1" data-show-preview="false">
+                                <input id="photo" name="photo" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="false">
                                 <script>
                                     $("#photo").fileinput({
                                         showUpload: false,
@@ -205,7 +204,7 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                                 </script>
                             </div> 
                             <div class="form-group">
-                                <input id="cover" name="cover" class="file" type="file" accept="image/jpg"  data-min-file-count="1" data-show-preview="false">
+                                <input id="cover" name="cover" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="false">
                                 <script>
                                     $("#cover").fileinput({
                                         showUpload: false,
@@ -264,11 +263,12 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 text-center">
                             <button type="submit" class="btn btn-block btn-default">REGISTRAR</button>
-                            </form>
                         </div>
                     </div>
                 </div>
             </div>
+            </form>
+
             <div class="section section-features">
                 <div class="container">
                     <h4 class="header-text text-center">Características</h4>
@@ -377,7 +377,7 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
             <div class="modal-dialog modal-sm" role="document">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form method="post" action="<?php echo base_url(); ?>heartapp/login">
+                        <form id="frm-login" method="post" action="<?php echo base_url(); ?>heartapp/login">
                         <h6 class="sub-header-text">Iniciar sesión</h6>
                         <div class="form-group">
                             <input type="email" class="form-control" name="emaillogin" id="emaillogin" placeholder="Correo electrónico">

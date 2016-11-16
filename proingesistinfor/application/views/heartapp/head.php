@@ -13,8 +13,9 @@
     <link href="<?php echo base_url();?>assets/backend/css/demo.css" rel="stylesheet" />
     <!--  Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/frontend/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Muli:400,300' rel='stylesheet' type='text/css'>
     <link href="<?php echo base_url();?>assets/backend/css/themify-icons.css" rel="stylesheet">
-    <?php if($section=='panel'){echo $map['js'];}?>
+    <?php if($section=='panel' || $section=='ubicacion'){echo $map['js'];}?>
     <script src="<?php echo base_url();?>assets/backend/js/jquery-1.10.2.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/backend/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="<?php echo base_url();?>assets/backend/js/bootstrap-checkbox-radio.js"></script>

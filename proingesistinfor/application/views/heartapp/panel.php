@@ -18,7 +18,7 @@
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <a href="" style="color:#a9a9a9">
+                                        <a href="<?php echo base_url(); ?>heartapp/perfil" style="color:#a9a9a9">
                                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                                             Acceder
                                         </a>
@@ -46,7 +46,7 @@
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <a href="" style="color:#a9a9a9">
+                                        <a href="<?php echo base_url(); ?>heartapp/reporte" style="color:#a9a9a9">
                                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                                             Acceder
                                         </a>
@@ -75,7 +75,7 @@
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <a href="" style="color:#a9a9a9">
+                                        <a href="<?php echo base_url(); ?>heartapp/pulso" style="color:#a9a9a9">
                                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                                             Acceder
                                         </a>
@@ -103,7 +103,7 @@
                                 <div class="footer">
                                     <hr />
                                     <div class="stats">
-                                        <a href="" style="color:#a9a9a9">
+                                        <a href="<?php echo base_url(); ?>heartapp/ubicacion" style="color:#a9a9a9">
                                             <i class="fa fa-arrow-left" aria-hidden="true"></i>
                                             Acceder
                                         </a>

@@ -59,6 +59,9 @@ $route['heartapp/login'] = 'heartapp/validate';
 $route['heartapp/logout'] = 'heartapp/logout';
 $route['heartapp/panel'] = 'heartapp/panel';
 $route['heartapp/perfil'] = 'heartapp/profile';
+$route['heartapp/perfil/update'] = 'heartapp/profile_update';
+
+
 $route['heartapp/reporte'] = 'heartapp/report';
 $route['heartapp/pulso'] = 'heartapp/pulse';
 $route['heartapp/ubicacion'] = 'heartapp/map';
