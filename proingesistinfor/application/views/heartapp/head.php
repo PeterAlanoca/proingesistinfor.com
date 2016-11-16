@@ -83,8 +83,13 @@
                 </div>
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="" data-toggle="modal" data-target="#modal-qr">
+                                <h4 style="margin:0px"><i class="fa fa-qrcode"></i></h4>
+                            </a>
+                        </li>
                         <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="ti-user"></i>
                                 <p><?php echo $user->firstname.' '.$user->lastname;?></p>
                                 <b class="caret"></b>
@@ -100,3 +105,23 @@
 
         <div class="content">
             <div class="container-fluid">
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal-qr" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Código QR</h4>
+                    </div>
+                    <div class="modal-body">
+                        <center>
+                            <img class="img-responsive img-rounded" src="<?php echo base_url(); ?>images/code_qr/<?php echo $user->code_qr; ?>">
+                        </center>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>

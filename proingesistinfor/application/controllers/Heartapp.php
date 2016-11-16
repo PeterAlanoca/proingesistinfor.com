@@ -9,10 +9,10 @@ class Heartapp extends CI_Controller {
     $this->load->library("googlemaps");
   }
 
-  function index() {
+  function index($msg = 1) {
+    $data['msg'] = $msg;
     if ($this->unlogged()) {
-      $this->load->view('heartapp/heartapp');
-
+      $this->load->view('heartapp/heartapp', $data);
     } else {
       redirect('heartapp/panel');
 
@@ -20,17 +20,20 @@ class Heartapp extends CI_Controller {
   }
 
   function registro() {
+    $email = $this->input->post('email');
+    $password = $this->input->post('password');
     $user = array(
       'username' => $this->input->post('username'),
-      'password' => $this->input->post('password'),
+      'password' => $password,
       'firstname' => $this->input->post('firstname'),
       'lastname' => $this->input->post('lastname'),
       'photo' =>$this->upload_image('photo'),
       'cover' => $this->upload_image('cover'),
-      'email' => $this->input->post('email'),
+      'email' => $email,
       'cellphone' => $this->input->post('cellphone'),
       'country' => 'Bolivia',
-      'city' => $this->input->post('city')
+      'city' => $this->input->post('city'),
+      'code_qr' => $this->code_qr($email.','.$password)
     );
     $contacts = array(
       0 => array(
@@ -52,6 +55,24 @@ class Heartapp extends CI_Controller {
     );
     $data = array('user' => $user, 'contacts' => $contacts);
     $this->heartapp_model->insertData($data);
+    
+    $result = $this->heartapp_model->getUser($email, $password);
+    $user = $result['user'];
+    if ($user != null) {
+      if (($user->email == $email) && ($user->password == $password)) {
+        $result['logged_in'] = true;
+        $this->session->set_userdata('userdata', $result);
+        if($this->loggedIn()){
+          redirect('heartapp/panel');
+        }
+      } 
+      else {
+        $this->index(0);
+      }
+    }
+    else {
+      $this->index(0);
+    }    
   }
 
   function panel() {
@@ -153,11 +174,11 @@ class Heartapp extends CI_Controller {
         }
       } 
       else {
-        echo "error";
+        $this->index(0);
       }
     }
     else {
-      echo "error";
+      $this->index(0);
     }
   }
 
@@ -237,5 +258,19 @@ class Heartapp extends CI_Controller {
     }      
     $finfo = $this->upload->data();
     return $finfo['file_name'];
+  }
+
+  function code_qr($text){
+    $date = str_replace(' ', '', $this->heartapp_model->getDate());
+    $date = str_replace(':', '', $date);
+    $date = str_replace('-', '', $date);
+    $name = 'CODEQR'.$date.'.png';
+    $this->load->library('ciqrcode');
+    $params['data'] = $text;
+    $params['level'] = 'H';
+    $params['size'] = 15;
+    $params['savename'] = FCPATH.'images/code_qr/'.$name;
+    $this->ciqrcode->generate($params); 
+    return $name;
   }
 }

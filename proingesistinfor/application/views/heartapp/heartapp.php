@@ -18,10 +18,21 @@
         <link href="<?php echo base_url();?>assets/frontend/css/star-rating/fileinput.css" media="all" rel="stylesheet" type="text/css" />
         <script src="<?php echo base_url();?>assets/frontend/js/star-rating/fileinput.js" type="text/javascript"></script>
         <script src="<?php echo base_url();?>assets/frontend/js/star-rating/es.js" type="text/javascript"></script>
+        <script src="<?php echo base_url();?>assets/frontend/js/notify.js" type="text/javascript"></script>
         <link rel="stylesheet" type="text/css" href="<?php echo base_url();?>assets/frontend/css/font-awesome.min.css">
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400,300' rel='stylesheet' type='text/css'>
     </head>
     <body class="landing-page landing-page1">
+        <?php if ($msg == 0){?>
+        <script type="text/javascript">
+            $.notify("Correo electrónico o contraseña incorrecto.", "error");
+        </script>
+        <?php } ?>
+        <?php if ($msg == 3){?>
+        <script type="text/javascript">
+            $.notify("Cuenta creada, ya puedes iniciar sesión", "success");
+        </script>
+        <?php } ?>
         <nav class="navbar navbar-transparent navbar-top" role="navigation">
             <div class="container">
                 <div class="navbar-header">

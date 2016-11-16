@@ -157,6 +157,10 @@ $(document).ready(function() {
                 minlength : 6,
                 maxlength: 11,
                 number: true
+            },
+
+            photo: {
+                required: true
             }
         },
        
@@ -258,6 +262,9 @@ $(document).ready(function() {
                 minlength : 'Debe ingresar al menos 7 caracteres.',
                 maxlength: 'Máximo 11 caracteres.',
                 number: 'Telefono no valido.'
+            },
+            photo: {
+                required: ''
             }
         }, 
 
