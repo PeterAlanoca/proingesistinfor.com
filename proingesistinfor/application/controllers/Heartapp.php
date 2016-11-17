@@ -78,12 +78,14 @@ class Heartapp extends CI_Controller {
   function panel() {
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
-      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);
+      $location = $this->heartapp_model->getLastData($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Panel';
       $data['section'] = $this->uri->segment(2);
-      $data['map'] = $this->create_mapa();
+      $data['pulse'] = $location['pulse'];
+      $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
       $data['view'] = $this->load->view('heartapp/panel', $data, true);   
       $this->view($data);
     }
@@ -123,9 +125,17 @@ class Heartapp extends CI_Controller {
   function report(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
-      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id); 
+
+      $row = $this->heartapp_model->getRowLocation($userdata['user']->id);
+      $this->paginar($row, 3, "heartapp/reporte/", 30);
+
+      $report = $this->heartapp_model->report($userdata['user']->id); 
+
+
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
+      $data['report'] = $report;
       $data['title'] = 'Reporte';
       $data['section'] = $this->uri->segment(2);
       $data['view'] = $this->load->view('heartapp/report', $data, true);   
@@ -146,15 +156,24 @@ class Heartapp extends CI_Controller {
     }
   }
 
+  function get_pulse() {
+    if ($this->loggedIn()) {
+      $userdata = $this->session->userdata('userdata');
+      $data = $this->heartapp_model->getPulse($userdata['user']->id);
+      print_r(json_encode($data[0]));
+    }
+  }
+
   function map(){
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
-      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);  
+      $userdata = $this->heartapp_model->getUserId($userdata['user']->id);
+      $location = $this->heartapp_model->getLastData($userdata['user']->id);  
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Mapa de ubicación';
       $data['section'] = $this->uri->segment(2);
-      $data['map'] = $this->create_mapa();
+      $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
       $data['view'] = $this->load->view('heartapp/map', $data, true);   
       $this->view($data);
     }
@@ -212,14 +231,9 @@ class Heartapp extends CI_Controller {
     $this->load->view('heartapp/footer', $data);       
   }
 
-  function create_mapa(){
-    $calle = 'calle';
-    $descripcion = 'description';
-    $mapa_nombre = "AGENCIA DE NOTICIAS CCB";       
-    $latitude = '-16.4787298';
-    $longitude = '-68.192445';
+  function create_mapa($latitude, $longitude){
+    $address = $this->getaddress($latitude, $longitude);
     $position = "".$latitude.', '. $longitude."";
-    $telefono = 'telefono';
     $config = array();
     $config['apiKey'] = 'AIzaSyCodEBbpjp-f6sCuU7EzjQWy2b7iUzxDqs';    
     $config['center'] = $position;
@@ -227,11 +241,32 @@ class Heartapp extends CI_Controller {
     $config["onload"] = 'window.setTimeout("google.maps.event.trigger(marker_0, \'click\');",300);';
     $this->googlemaps->initialize($config);
     $markers['position'] = $position;
-    $markers['infowindow_content']  = "<div class='bounce'><center><h2 style='margin:5px'>".$mapa_nombre."</h2><h3 style='margin:5px'><i class='glyphicon glyphicon-map-marker'></i>&nbsp&nbsp".$calle."</h3><h3 style='margin:5px'><i class='glyphicon glyphicon-home'></i>&nbsp&nbsp".$descripcion."</h3><h3 style='margin:5px'><i class='glyphicon glyphicon-earphone'></i>&nbsp&nbsp".$telefono."</h3><center></div>"; 
+    $markers['infowindow_content']  = $address; 
     $marker['animation']='BOUNCE';
     $this->googlemaps->add_marker($markers);
-    $mapa = $this->googlemaps->create_map();       
-    return $mapa;
+    $map = $this->googlemaps->create_map();       
+    return $map;
+  }
+
+ 
+  function getaddress($lat,$lng){
+    $userdata = $this->session->userdata('userdata');
+    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&sensor=false';
+    $json = @file_get_contents($url);
+    $data = json_decode($json);
+    $status = $data->status;
+    if ($status=="OK") { 
+      $text = $data->results[0]->formatted_address;
+      list($street, $city, $country) = explode(',', $text);
+      $country = '<center><h3 style="margin:1px" class="text-success"><i class="fa fa-flag"></i>  '.$country.'</h3></center>';
+      $city = '<center><h3 style="margin:1px" class="text-info"><i class="glyphicon glyphicon-map-marker"></i> '.$city.'</h3></center>';
+      $street = '<center><h4 style="margin:1px" class="text-danger"><i class="glyphicon glyphicon-home"></i> '.$street.'</h4></center>';
+      $cellphone = '<center><h3 style="margin:1px" class="text-warning"><i class="glyphicon glyphicon-earphone"></i> '.$userdata['user']->cellphone.'</h3></center>';
+      $data = $country.$city.$street.$cellphone;
+      return $data;
+    } else {
+      return false;
+    }
   }
 
   function upload_image($image){
@@ -272,5 +307,19 @@ class Heartapp extends CI_Controller {
     $params['savename'] = FCPATH.'images/code_qr/'.$name;
     $this->ciqrcode->generate($params); 
     return $name;
+  }
+
+  function paginar($filas, $segment, $url, $por_pagina){
+    $this->load->library('pagination'); //Cargamos la librería de paginación
+    $config['base_url'] = base_url().$url; // parametro base de la aplicación, si tenemos un .htaccess nos evitamos el index.php
+    $config['per_page'] = $por_pagina; //Número de registros mostrados por páginas
+    $config['num_links'] = 5; //Número de links mostrados en la paginación
+    $config['first_link'] = 'Primera';//primer link
+    $config['last_link'] = 'Última';//último link
+    $config["uri_segment"] = $segment;//el segmento de la paginación
+    $config['next_link'] = 'Siguiente';//siguiente link
+    $config['prev_link'] = 'Anterior';
+    $config['total_rows'] =$filas;//anterior link
+    $this->pagination->initialize($config);
   }
 }

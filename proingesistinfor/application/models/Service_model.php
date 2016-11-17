@@ -27,8 +27,19 @@ class Service_model extends CI_Model {
         return $this->getResultArray($query);
     }
 
-    function insertData($datauser){
-        $this->db->insert('user', $datauser);
+    function insertData($location){
+        $location['date'] = $this->getDate();
+        $this->db->insert('location', $location);
+    }
+
+    function getDate() {
+        $query = $this->db->query("select NOW()");
+        if($query->num_rows()>0) {
+            foreach ($query->result_array() as $row){
+                $dato = $row['NOW()'];
+            }
+        return($dato);
+        }
     }
 
     function getResultArray($query){

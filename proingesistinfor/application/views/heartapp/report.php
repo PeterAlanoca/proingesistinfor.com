@@ -1,3 +1,20 @@
+<?php 
+  function getAddress($lat, $lng){
+    $url = 'http://maps.googleapis.com/maps/api/geocode/json?latlng='.trim($lat).','.trim($lng).'&sensor=false';
+    $json = @file_get_contents($url);
+    $data = json_decode($json);
+    $status = $data->status;
+    if ($status=="OK") { 
+      $text = $data->results[0]->formatted_address;
+      list($street, $city, $country) = explode(',', $text);
+      $aux = array('city' => $city, 'street' => $street);
+      return $aux;
+    } else {
+      return false;
+    }
+  }
+?>
+
 <div class="row">
   <div class="col-md-12">
     <div class="card">
@@ -8,44 +25,44 @@
       <div class="content table-responsive table-full-width">
         <table class="table table-striped">
           <thead>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Salary</th>
-            <th>Country</th>
-            <th>City</th>
+            <th>Pulso cardiaco</th>
+            <th>Ciudad</th>
+            <th>Calle</th>
+            <th>Hora</th>
+            <th>Fecha</th>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Dakota Rice</td>
-              <td>$36,738</td>
-              <td>Niger</td>
-              <td>Oud-Turnhout</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Minerva Hooper</td>
-              <td>$23,789</td>
-              <td>Curaçao</td>
-              <td>Sinaai-Waas</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Sage Rodriguez</td>
-              <td>$56,142</td>
-              <td>Netherlands</td>
-              <td>Baileux</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Philip Chaney</td>
-              <td>$38,735</td>
-              <td>Korea, South</td>
-              <td>Overland Park</td>
-            </tr>
+            <?php 
+              if ($report) {
+                foreach ($report as $report) {
+                  $id = $report->id;
+                  $id_user = $report->id_user;
+                  $latitude = $report->latitude;
+                  $longitude = $report->longitude;
+                  $pulse = $report->pulse;
+                  $date = new DateTime($report->date);
+                  $hour = $date->format('H:i:s');
+                  $date = $date->format('d/m/Y');
+                  $address = getAddress($latitude, $longitude);
+                  $city = $address['city']; 
+                  $street = $address['street'];
+                  echo '
+                  <tr>
+                    <td>'.$pulse.' (BTM) </td>
+                    <td>'.$city.'</td>
+                    <td>'.$street.'</td>
+                    <td>'.$hour.'</td>
+                    <td>'.$date.'</td>
+                  </tr>';
+                }
+              }
+            ?>
           </tbody>
         </table>
       </div>
+    </div>
+    <div class="text-center">
+      <?php echo $this->pagination->create_links() ?>
     </div>
   </div>
 </div>

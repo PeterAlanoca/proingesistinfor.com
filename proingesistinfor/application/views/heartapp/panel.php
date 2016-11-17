@@ -146,6 +146,7 @@
                                 <?php echo $map['html']; ?>
                                 <div class="footer">
                                     <div class="chart-legend">
+                                        <i class="fa fa-flag text-success"></i> País
                                         <i class="glyphicon glyphicon-map-marker text-info"></i> Ciudad
                                         <i class="glyphicon glyphicon-home text-danger"></i> Calle
                                         <i class="glyphicon glyphicon-earphone text-warning"></i> Celular
@@ -185,18 +186,25 @@
                     //type: 'datetime',
                     //tickPixelInterval: 150
                     categories: [
-                        'Tokyo',
-                        'New York',
-                        'London',
-                        'London',
-                        'London',
-                        'London',
-                        'Berlin'
+                    <?php 
+                        if ($pulse) { 
+                            $pulsedata = $pulse;
+                            foreach ($pulse as $pulse) {
+                                $date = new DateTime($pulse->date);
+                                $date = $date->format('d/m/Y H:i:s');
+                                
+                    ?>
+                        '<?php echo $date; ?>',
+                    <?php      
+                            }
+                        }
+                    ?>
+                        
                     ]
                 },
                 yAxis: {
                     title: {
-                        text: 'Pulso cardiaco'
+                        text: 'Pulso cardiaco (BPM)'
                     },
                     plotLines: [{
                         value: 0,
@@ -206,7 +214,7 @@
                 },
                 tooltip: {
                     formatter: function() {
-                        return 'Extra data: <b>'+ this.point.myData +'</b>';
+                        return 'BPM: <b>'+ this.point.myData +'</b>';
                     }
                 },
                 legend: {
@@ -219,12 +227,19 @@
                 series: [{
                     name: 'Foo',
                     data: [ 
-                            { y : 3, myData : 'firstPoint' },
-                            { y : 7, myData : 'secondPoint' },
-                            { y : 7, myData : 'secondPoint' },
-                            { y : 7, myData : 'secondPoint' },
-                            { y : 7, myData : 'secondPoint' },
-                            { y : 1, myData : 'thirdPoint' } 
+                    <?php 
+                        if ($pulsedata) { 
+                            $i = 1;
+                            foreach ($pulsedata as $pulsedata) {
+                                $auxpulse = $pulsedata->pulse;
+                                $i = $i * -1;
+                                $auxpulse01 = $auxpulse * $i;
+                    ?>
+                        { y : <?php echo $auxpulse01;?>, myData : '<?php echo $auxpulse;?>' },
+                    <?php      
+                            }
+                        }
+                    ?>
                             ]
                 }]
             });

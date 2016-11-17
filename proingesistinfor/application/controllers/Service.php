@@ -35,14 +35,16 @@ class Service extends CI_Controller {
 			print_r(json_encode(array('state' => 0)));
 		}
 	}
-
-	function insertData(){
-		$datauser = array(
-			'username' => $this->input->get('username'),
-			'password' => $this->input->get('password'),
-			'name' => $this->input->get('name')
+ 
+ 	function insertData(){
+		$location = array(
+			'id_user' => $this->input->get('id_user'),
+			'latitude' => $this->input->get('latitude'),
+			'longitude' => $this->input->get('longitude'),
+			'pulse' => $this->input->get('pulse')
 		);
-
-		$this->service_model->insertData($datauser);
+		$this->service_model->insertData($location);
 	}
+
+
 }

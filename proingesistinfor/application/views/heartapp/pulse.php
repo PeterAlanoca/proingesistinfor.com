@@ -40,18 +40,19 @@ $(function () {
                     load: function () {
                         // set up the updating of the chart each second
                         var series = this.series;
-                        var temperatura = 0;
-                        var humedad = 0
+                        var pulse = 0;
+                        var i = -1;
+                        
 
                         setInterval(function () {
                             $.ajax({
-                                url: "<?php echo base_url()."temperatura/obtener"?>",
+                                url: "<?php echo base_url()."heartapp/pulso/obtener"?>",
                                 type: "json",
                                 success:function(data){
                                   var obj = JSON.parse(data);
-                                  fecha = obj.fecha;
-                                  temperatura = obj.temperatura;
-                                  humedad = obj.humedad;
+                                  pulse = obj.pulse;
+                                  i = i * -1;
+                                  pulse = pulse * i; 
                                 },
                                 error: function(){
                                     
@@ -59,24 +60,20 @@ $(function () {
                             }); 
 
                             var x = (new Date()).getTime(), // current time
-                                y = parseInt(temperatura),
-                                y1 = parseInt(humedad);
+                                y = parseInt(pulse);
 
-                            series[0].addPoint([x, y], false, true);
-                            series[1].addPoint([x, y1], true, true);
+                            series[0].addPoint([x, y], true, true);
+                            
 
                         }, 1000);
                         
                     }
                 }
             },
+            colors: ['#EB5E28'],
             title: {
-                text: 'Grafica de temperatura y Humedad.',
+                text: '',
                 x: -20 //center
-            },
-            subtitle: {
-                text: 'LNA',
-                x: -20
             },
             xAxis: {
                 type: 'datetime',
@@ -84,7 +81,7 @@ $(function () {
             },
             yAxis: {
                 title: {
-                    text: 'Temperatura (°C)'
+                    text: 'Pulso cardiaco (BPM)'
                 },
                 plotLines: [{
                     value: 0,
@@ -107,7 +104,7 @@ $(function () {
             },
             series: [
                 {
-                name: 'Temperatura',
+                name: 'Pulso cardiaco (BPM)',
                 data: (function () {
                     var data = [],
                         time = (new Date()).getTime(),
@@ -121,24 +118,6 @@ $(function () {
                     }
                     return data;
                 }())  
-            },
-
-            {
-                name: 'Humedad',
-                data: (function () {
-                    var data = [],
-                        time = (new Date()).getTime(),
-                        i;
-
-                    for (i = -19; i <= 0; i += 1) {
-                        data.push({
-                            x: time + i * 1000,
-                            y: 0
-                        });
-                    }
-                    return data;
-                }())
-               
             }
 
             ]

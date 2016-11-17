@@ -33,6 +33,32 @@ class Heartapp_model extends CI_Model {
     return $id[0]->id;
   }
 
+  function getLastData($id) {
+    $query = $this->db->query('select latitude, longitude from location where id_user = '.$id.' order by id desc limit 1');
+    $location = $this->getResultArray($query);
+    $query = $this->db->query('select pulse, date from location where id_user = '.$id.' order by id desc limit 10');
+    $pulse = $this->getResultArray($query);
+    $data = array('location' => $location, 'pulse' => $pulse);
+    return $data;
+  }
+
+  function getRowLocation($id) {
+    $query = $this->db->query("select * from location where id_user = ".$id);
+    return $this->getResultRows($query);  
+  }
+
+  function report($id) {
+    $aux = $this->uri->segment(3);
+    if ($aux=="") {$aux = 0;}
+    $query = $this->db->query("select * from location where id_user = ".$id." order by date desc limit ".$aux.", 30;");
+    return $this->getResultArray($query); 
+  }
+
+  function getPulse($id) {
+    $query = $this->db->query('select * from location where id_user = '.$id.' order by id desc limit 1');
+    return $this->getResultArray($query);
+  }
+
   function getUser($email = "", $password = ""){
     $query = $this->db->query('select * from user where email = "'.$email.'" and password = "'.$password.'" limit 1');
     if ($query->num_rows() > 0) {
@@ -73,4 +99,11 @@ class Heartapp_model extends CI_Model {
       return($data);
     }
   }
-}
+
+  function getResultRows($query){
+    if($query->num_rows()>0) {
+      return $query->num_rows();
+    }
+  }
+
+} 
