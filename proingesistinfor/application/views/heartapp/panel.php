@@ -122,6 +122,9 @@
                             </div>
                             <div class="content">
                                 <div id="pulso-chart"></div>
+                                <?php if (!$pulse) {
+                                    echo '<center><h1 class="text-danger"><i class="glyphicon glyphicon-warning-sign"></i> No se encontro registros de pulso cardiaco.</h1></center><br>';
+                                } ?>
                                 <div class="footer">
                                     <div class="chart-legend">
                                         <i class="fa fa-heart heart"></i> Pulso cardiaco
@@ -161,7 +164,7 @@
                     </div>
                 </div>
             
-
+<?php if ($pulse) {?>
 <script type="text/javascript">
     $(function () {
         $(document).ready(function () {
@@ -246,3 +249,4 @@
         });
     });
 </script>
+<?php } ?>

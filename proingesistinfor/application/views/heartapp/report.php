@@ -55,6 +55,11 @@
                     <td>'.$date.'</td>
                   </tr>';
                 }
+              } else {
+                  echo ' 
+                  <tr>
+                    <td colspan="5"><h5>Sin registros.</h5></td>
+                  </tr>';
               }
             ?>
           </tbody>

@@ -50,7 +50,7 @@ class Heartapp_model extends CI_Model {
   function report($id) {
     $aux = $this->uri->segment(3);
     if ($aux=="") {$aux = 0;}
-    $query = $this->db->query("select * from location where id_user = ".$id." order by date desc limit ".$aux.", 30;");
+    $query = $this->db->query("select * from location where id_user = ".$id." order by date desc limit ".$aux.", 10;");
     return $this->getResultArray($query); 
   }
 

@@ -38,12 +38,9 @@ $(function () {
                 marginRight: 10,
                 events: {
                     load: function () {
-                        // set up the updating of the chart each second
                         var series = this.series;
                         var pulse = 0;
                         var i = -1;
-                        
-
                         setInterval(function () {
                             $.ajax({
                                 url: "<?php echo base_url()."heartapp/pulso/obtener"?>",

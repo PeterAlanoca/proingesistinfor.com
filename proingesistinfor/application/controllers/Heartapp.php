@@ -79,13 +79,18 @@ class Heartapp extends CI_Controller {
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
       $userdata = $this->heartapp_model->getUserId($userdata['user']->id);
-      $location = $this->heartapp_model->getLastData($userdata['user']->id);  
+      $location = $this->heartapp_model->getLastData($userdata['user']->id);
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Panel';
       $data['section'] = $this->uri->segment(2);
       $data['pulse'] = $location['pulse'];
-      $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
+      if ($location['location']) {
+        $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
+      } else {
+        $map = array('js' => '', 'html' => '<center><h1 class="text-danger"><i class="glyphicon glyphicon-warning-sign"></i> No se encontro registro de ubicación.</h1></center><br>');
+        $data['map'] = $map;
+      }
       $data['view'] = $this->load->view('heartapp/panel', $data, true);   
       $this->view($data);
     }
@@ -126,13 +131,9 @@ class Heartapp extends CI_Controller {
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
       $userdata = $this->heartapp_model->getUserId($userdata['user']->id); 
-
       $row = $this->heartapp_model->getRowLocation($userdata['user']->id);
-      $this->paginar($row, 3, "heartapp/reporte/", 30);
-
+      $this->paginar($row, 3, "heartapp/reporte/", 10);
       $report = $this->heartapp_model->report($userdata['user']->id); 
-
-
       $data['user'] = $userdata['user'];
       $data['contacts'] = $userdata['contacts'];
       $data['report'] = $report;
@@ -160,7 +161,12 @@ class Heartapp extends CI_Controller {
     if ($this->loggedIn()) {
       $userdata = $this->session->userdata('userdata');
       $data = $this->heartapp_model->getPulse($userdata['user']->id);
-      print_r(json_encode($data[0]));
+      if ($data){
+        print_r(json_encode($data[0]));
+      } else {
+        $data = array('pulse' => 0);
+        print_r(json_encode($data));
+      }
     }
   }
 
@@ -173,7 +179,12 @@ class Heartapp extends CI_Controller {
       $data['contacts'] = $userdata['contacts'];
       $data['title'] = 'Mapa de ubicación';
       $data['section'] = $this->uri->segment(2);
-      $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
+      if ($location['location']) {
+        $data['map'] = $this->create_mapa($location['location'][0]->latitude, $location['location'][0]->longitude);
+      } else {
+        $map = array('js' => '', 'html' => '<center><h1 class="text-danger"><i class="glyphicon glyphicon-warning-sign"></i> No se encontro registro de ubicación.</h1></center><br>');
+        $data['map'] = $map;
+      }
       $data['view'] = $this->load->view('heartapp/map', $data, true);   
       $this->view($data);
     }
@@ -283,12 +294,12 @@ class Heartapp extends CI_Controller {
     $config['file_name'] = $name.'-'.$date;
     $config['allowed_types'] = "*";
     $config['max_size'] = "50000";
-    $config['max_width'] = "2000";
-    $config['max_height'] = "2000";
+    $config['max_width'] = "50000";
+    $config['max_height'] = "50000";
     $this->upload->initialize($config);
     if (!$this->upload->do_upload($image)) {
         $data['uploadError'] = $this->upload->display_errors();
-        //echo $this->upload->display_errors();
+        echo $this->upload->display_errors();
         return ;
     }      
     $finfo = $this->upload->data();

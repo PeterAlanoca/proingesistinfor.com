@@ -194,7 +194,7 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                             </div>
                             <h6 class="sub-header-text">Foto y portada</h6>
                             <div class="form-group">
-                                <input id="photo" name="photo" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="false">
+                                <input id="photo" name="photo" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="true">
                                 <script>
                                     $("#photo").fileinput({
                                         showUpload: false,
@@ -207,15 +207,16 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                                         removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
                                         previewFileType: 'image',
                                         allowedFileExtensions: ["jpg"],
-                                        maxImageWidth: 5048,
-                                        maxImageHeight: 5048,
+                                        maxFileSize: 700,
+                                        maxImageWidth: 4000,
+                                        maxImageHeight: 4000,
                                         minImageWidth: 0,
                                         minImageHeight: 0
                                     });
                                 </script>
                             </div> 
                             <div class="form-group">
-                                <input id="cover" name="cover" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="false">
+                                <input id="cover" name="cover" class="file" type="file" accept="image/jpg, image/jpeg"  data-min-file-count="1" data-show-preview="true">
                                 <script>
                                     $("#cover").fileinput({
                                         showUpload: false,
@@ -228,8 +229,9 @@ Además es especialmente útil para optimizar nuestra forma de hacer deportes y 
                                         removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
                                         previewFileType: 'image',
                                         allowedFileExtensions: ["jpg"],
-                                        maxImageWidth: 5048,
-                                        maxImageHeight: 5048,
+                                        maxFileSize: 700,
+                                        maxImageWidth: 4000,
+                                        maxImageHeight: 4000,
                                         minImageWidth: 0,
                                         minImageHeight: 0
                                     });

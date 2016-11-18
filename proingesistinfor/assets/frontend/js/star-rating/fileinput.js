@@ -3179,7 +3179,7 @@
         msgNo: 'No',
         msgCancelled: 'Cancelled',
         msgZoomModalHeading: 'Detailed Preview',
-        msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>) exceeds maximum allowed upload size of <b>{maxSize} KB</b>.',
+        msgSizeTooLarge: 'El "{name}" (<b>{size} KB</b>) archivo excede el maximo de <b>{maxSize} KB</b>.',
         msgFilesTooLess: 'No selecciono una <b>imagen</b>.',
         msgFilesTooMany: 'Number of files selected for upload <b>({n})</b> exceeds maximum allowed limit of <b>{m}</b>.',
         msgFileNotFound: 'File "{name}" not found!',
